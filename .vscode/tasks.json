@@ -1,0 +1,28 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Start static server",
+            "type": "shell",
+            "command": "npx -y serve -l 8080",
+            "options": {
+                "cwd": "${workspaceFolder}",
+                "env": {}
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "server",
+                "pattern": { "regexp": "^(.*)$" },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": ".",
+                    "endsPattern": "localhost:8080|Serving!|Local:"
+                }
+            },
+            "presentation": {
+                "reveal": "silent",
+                "panel": "shared"
+            }
+        }
+    ]
+}

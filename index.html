@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Will you be my Valentine?</title>
+  <meta name="description" content="A few very important questions... Your future Valentine may depend on this.">
+  <meta property="og:title" content="Will you be my Valentine?">
+  <meta property="og:description" content="A few very important questions... Your future Valentine may depend on this.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --baby-pink: #f8d7da;
+      --baby-pink-light: #fce4ec;
+      --baby-pink-dark: #f5c6cb;
+      --romantic-red: #c41e3a;
+      --romantic-red-soft: #e91e63;
+      --romantic-red-dark: #9b1630;
+      --white: #fffbfc;
+      --cream: #fff5f7;
+      --text-dark: #4a2c2a;
+      --text-soft: #6b4442;
+      --shadow: rgba(196, 30, 58, 0.15);
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'Quicksand', sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-body);
+      color: var(--text-dark);
+      background: linear-gradient(165deg, var(--baby-pink-light) 0%, var(--cream) 35%, var(--baby-pink) 70%, var(--baby-pink-dark) 100%);
+      background-attachment: fixed;
+      overflow-x: hidden;
+      padding-top: 3.25rem;
+    }
+    .app-tabs {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      display: flex;
+      gap: 0;
+      padding: 0.5rem 1rem;
+      background: var(--white);
+      border-bottom: 2px solid var(--baby-pink-dark);
+      box-shadow: 0 2px 10px var(--shadow);
+    }
+    .tab-btn {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 0.5rem 1.25rem;
+      border: none;
+      background: transparent;
+      color: var(--text-soft);
+      cursor: pointer;
+      border-radius: 8px;
+      transition: color 0.2s, background 0.2s;
+    }
+    .tab-btn:hover { color: var(--romantic-red-dark); background: var(--baby-pink-light); }
+    .tab-btn.active { color: var(--romantic-red); background: var(--baby-pink-light); }
+    .tab-link { text-decoration: none; margin-left: auto; }
+    .tab-link:hover { color: var(--romantic-red-dark); background: var(--baby-pink-light); }
+    .screen {
+      display: none;
+      min-height: 100vh;
+      padding: 2rem 1.5rem;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      animation: fadeIn 0.6s ease-out;
+    }
+    .screen.active { display: flex; flex-direction: column; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    #splash { justify-content: center; }
+    .splash-text {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      font-weight: 600;
+      color: var(--romantic-red-dark);
+      margin: 0;
+      letter-spacing: 0.02em;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    .splash-hearts { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .splash-hearts::before,
+    .splash-hearts::after {
+      content: "♥";
+      position: absolute;
+      font-size: 1.5rem;
+      color: var(--romantic-red-soft);
+      opacity: 0.3;
+      animation: float 4s ease-in-out infinite;
+    }
+    .splash-hearts::before { left: 15%; top: 20%; animation-delay: 0s; }
+    .splash-hearts::after { right: 15%; bottom: 25%; animation-delay: 2s; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
+    @keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-15px) scale(1.1); } }
+    #landing { max-width: 32rem; }
+    .landing-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.75rem, 4vw, 2.25rem);
+      font-weight: 600;
+      color: var(--romantic-red-dark);
+      margin: 0 0 1rem;
+      line-height: 1.3;
+    }
+    .landing-subtext { font-size: 1rem; color: var(--text-soft); margin: 0 0 2rem; line-height: 1.5; }
+    .btn {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn:focus-visible { outline: 2px solid var(--romantic-red); outline-offset: 3px; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--romantic-red) 0%, var(--romantic-red-soft) 100%);
+      color: var(--white);
+      box-shadow: 0 4px 14px var(--shadow);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--shadow); }
+    .btn-ghost { background: transparent; color: var(--romantic-red-dark); }
+    .btn-ghost:hover { text-decoration: underline; }
+    .btn-small { padding: 0.5rem 1rem; font-size: 0.9rem; background: var(--romantic-red-soft); color: var(--white); }
+    #quiz { display: none; flex-direction: column; align-items: center; max-width: 36rem; margin: 0 auto; }
+    #quiz.active { display: flex; }
+    .quiz-section { display: none; width: 100%; }
+    .quiz-section.active { display: block; animation: fadeIn 0.4s ease-out; }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      color: var(--romantic-red-dark);
+      margin: 0 0 1.5rem;
+    }
+    .section-intro { font-style: italic; color: var(--text-soft); margin: 0 0 1.5rem; }
+    .question { margin-bottom: 2rem; text-align: left; }
+    .question-text { font-size: 1.1rem; color: var(--text-dark); margin: 0 0 1rem; line-height: 1.5; }
+    .options { display: flex; flex-direction: column; gap: 0.6rem; }
+    .option {
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      padding: 0.85rem 1rem;
+      text-align: left;
+      background: var(--white);
+      color: var(--text-dark);
+      border: 2px solid var(--baby-pink-dark);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    }
+    .option:hover { background: var(--baby-pink-light); border-color: var(--romantic-red-soft); transform: translateX(4px); }
+    .option:disabled { opacity: 0.7; cursor: default; }
+    .custom-input-wrap { margin-top: 0.75rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .custom-input {
+      flex: 1;
+      min-width: 150px;
+      padding: 0.6rem 0.75rem;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      border: 2px solid var(--baby-pink-dark);
+      border-radius: 10px;
+      background: var(--white);
+      color: var(--text-dark);
+    }
+    .custom-input:focus { outline: none; border-color: var(--romantic-red-soft); }
+    #final-section .final-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      color: var(--romantic-red-dark);
+      margin: 0 0 1rem;
+    }
+    .final-pause-wrap { position: relative; min-height: 5rem; margin: 0 0 1rem; }
+    .final-pause-line {
+      font-size: 1.1rem;
+      color: var(--text-soft);
+      line-height: 1.7;
+      margin: 0;
+      max-width: 28rem;
+      opacity: 0;
+      transition: opacity 0.9s ease-out;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      padding: 0 1rem;
+      text-align: center;
+      pointer-events: none;
+    }
+    .final-pause-line.visible { opacity: 1; }
+    .final-pause-line.fade-out { opacity: 0; }
+    .final-question-wrap { opacity: 0; transition: opacity 1s ease-out; }
+    .final-question-wrap.visible { opacity: 1; }
+    .final-question { font-size: 1.2rem; font-weight: 600; color: var(--romantic-red); margin: 0 0 1.5rem; }
+    .final-options { display: flex; flex-direction: column; gap: 0.75rem; align-items: center; }
+    .btn-yes {
+      background: linear-gradient(135deg, var(--romantic-red) 0%, var(--romantic-red-soft) 100%);
+      color: var(--white);
+      min-width: 220px;
+    }
+    .btn-yes:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--shadow); }
+    .btn-no { background: var(--white); color: var(--romantic-red-dark); border: 2px solid var(--romantic-red-soft); }
+    .btn-no:hover { background: var(--baby-pink-light); }
+    .quiz-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 20rem;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--baby-pink-dark);
+    }
+    .progress-text { font-size: 0.9rem; color: var(--text-soft); }
+    #success { justify-content: center; }
+    .success-message {
+      font-family: var(--font-display);
+      font-size: clamp(1.35rem, 4vw, 1.75rem);
+      color: var(--romantic-red-dark);
+      line-height: 1.6;
+      margin: 0;
+    }
+    .success-hearts { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .success-hearts::before,
+    .success-hearts::after { content: "💖"; position: absolute; font-size: 2rem; animation: float 3s ease-in-out infinite; }
+    .success-hearts::before { left: 10%; top: 15%; animation-delay: 0s; }
+    .success-hearts::after { right: 10%; bottom: 20%; animation-delay: 1.5s; }
+    .popup-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(74, 44, 42, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 1rem;
+      animation: fadeIn 0.25s ease-out;
+    }
+    .popup-overlay[hidden] { display: none !important; }
+    .popup {
+      background: var(--white);
+      padding: 1.75rem;
+      border-radius: 16px;
+      max-width: 20rem;
+      box-shadow: 0 10px 40px var(--shadow);
+      border: 2px solid var(--baby-pink-dark);
+      text-align: center;
+    }
+    .popup p { margin: 0 0 1rem; color: var(--text-dark); line-height: 1.5; }
+    #results-screen { display: none; padding-top: 1rem; }
+    #results-screen.active { display: flex; flex-direction: column; align-items: center; max-width: 36rem; margin: 0 auto; }
+    .results-header { text-align: center; margin-bottom: 1.5rem; }
+    .results-title { font-family: var(--font-display); font-size: 1.5rem; color: var(--romantic-red-dark); margin: 0 0 0.25rem; }
+    .results-subtitle { font-size: 0.9rem; color: var(--text-soft); margin: 0; }
+    .results-list { width: 100%; display: flex; flex-direction: column; gap: 1rem; }
+    .result-card {
+      background: var(--white);
+      border: 2px solid var(--baby-pink-dark);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+    .result-card-header {
+      padding: 0.75rem 1rem;
+      background: var(--baby-pink-light);
+      font-weight: 600;
+      color: var(--romantic-red-dark);
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: none;
+      width: 100%;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      text-align: left;
+    }
+    .result-card-header:hover { background: var(--baby-pink); }
+    .result-card-body { padding: 1rem; border-top: 1px solid var(--baby-pink-dark); }
+    .result-row { font-size: 0.9rem; margin-bottom: 0.5rem; line-height: 1.4; }
+    .result-row:last-child { margin-bottom: 0; }
+    .result-q { color: var(--text-soft); font-weight: 500; }
+    .result-a { color: var(--text-dark); }
+    .results-empty { text-align: center; color: var(--text-soft); font-size: 1rem; margin: 2rem 0; }
+    @media (min-width: 600px) {
+      .screen { padding: 3rem 2rem; }
+      .option { padding: 1rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="app-tabs" aria-label="Main navigation">
+    <button type="button" class="tab-btn active" data-tab="quiz" aria-current="page">Quiz</button>
+    <button type="button" class="tab-btn" data-tab="results">Past results</button>
+    <a href="https://github.com/daltonadams" class="tab-btn tab-link" target="_blank" rel="noopener noreferrer" aria-label="View on GitHub">GitHub</a>
+  </nav>
+
+  <section id="splash" class="screen active">
+    <p class="splash-text">Valentines Day is coming up...</p>
+    <div class="splash-hearts" aria-hidden="true"></div>
+  </section>
+
+  <section id="landing" class="screen">
+    <h1 class="landing-title">I have a few very important questions.</h1>
+    <p class="landing-subtext">Please answer honestly. Your future Valentine may depend on this. No pressure though….</p>
+    <button type="button" class="btn btn-primary" data-action="start-quiz">Fine, I'll answer</button>
+  </section>
+
+  <main id="quiz" class="screen">
+    <div id="section-1" class="quiz-section">
+      <h2 class="section-title">💖 THE VIBE CHECK</h2>
+      <div class="question" data-q="1">
+        <p class="question-text">How do you feel about a guy who sometimes overthinks… but is actively trying to do better?</p>
+        <div class="options">
+          <button type="button" class="option" data-answer="growth">🥺 He's learning, I respect growth</button>
+          <button type="button" class="option" data-answer="communicates">😌 As long as he communicates</button>
+          <button type="button" class="option" data-answer="restart">😏 Depends… does he treat me right?</button>
+        </div>
+      </div>
+      <div class="question" data-q="2">
+        <p class="question-text">Would you agree that we have main-character energy together?</p>
+        <div class="options">
+          <button type="button" class="option" data-answer="cinematic">Obviously. It's cinematic.</button>
+          <button type="button" class="option" data-answer="restart">No your boring.</button>
+          <button type="button" class="option" data-answer="true">I hate how true this is.</button>
+        </div>
+      </div>
+      <div class="question" data-q="3">
+        <p class="question-text">On a scale from 1–10, how cute do you look when you get fake mad?</p>
+        <div class="options">
+          <button type="button" class="option" data-answer="10">10</button>
+          <button type="button" class="option" data-answer="11">11</button>
+          <button type="button" class="option" data-answer="noted">Don't play with me</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="section-2" class="quiz-section">
+      <h2 class="section-title">💖 SOFT STUFF</h2>
+      <p class="section-intro">Lets get real...</p>
+      <div class="question" data-q="4">
+        <p class="question-text">Do you believe people can grow when they actually choose to?</p>
+        <div class="options">
+          <button type="button" class="option" data-answer="yes">Yes</button>
+          <button type="button" class="option" data-answer="effort">Yes, but it takes effort</button>
+          <button type="button" class="option" data-answer="mean">Only if they mean it</button>
+        </div>
+      </div>
+      <div class="question" data-q="5">
+        <p class="question-text">If someone told you they're choosing to stop running when things feel hard… would that matter?</p>
+        <div class="options">
+          <button type="button" class="option" data-answer="alot">A lot</button>
+          <button type="button" class="option" data-answer="more">More than they think</button>
+          <button type="button" class="option" data-answer="depends">Depends</button>
+        </div>
+        <div class="custom-input-wrap" hidden>
+          <input type="text" id="q5-input" class="custom-input" placeholder="Your thoughts..." maxlength="200">
+          <button type="button" class="btn btn-small" data-action="submit-q5">Submit</button>
+        </div>
+      </div>
+      <div class="question" data-q="6">
+        <p class="question-text">Do you feel safe being fully yourself around me?</p>
+        <div class="options">
+          <button type="button" class="option" data-answer="yes">Yes</button>
+          <button type="button" class="option" data-answer="getting">Getting there</button>
+          <button type="button" class="option" data-answer="most">Most of the time</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="section-3" class="quiz-section">
+      <h2 class="section-title">😏 BACK TO CUTE</h2>
+      <div class="question" data-q="7">
+        <p class="question-text">Would you enjoy a Valentine's Day that's more hands on or lazy day?</p>
+        <div class="options">
+          <button type="button" class="option" data-answer="lazy">Yes, I want be lazy</button>
+          <button type="button" class="option" data-answer="action">Lets get some action</button>
+          <button type="button" class="option" data-answer="custom7">I have an idea that is none of the above</button>
+        </div>
+        <div class="custom-input-wrap" hidden>
+          <input type="text" id="q7-input" class="custom-input" placeholder="Your idea..." maxlength="200">
+          <button type="button" class="btn btn-small" data-action="submit-q7">Submit</button>
+        </div>
+      </div>
+      <div class="question" data-q="8">
+        <p class="question-text">Do you like when I actually try and put effort into things like this?</p>
+        <div class="options">
+          <button type="button" class="option" data-answer="attractive">It's very attractive</button>
+          <button type="button" class="option" data-answer="harder">I think you need to try harder</button>
+          <button type="button" class="option" data-answer="inperson">No I rather in person</button>
+        </div>
+      </div>
+      <div class="question" data-q="9">
+        <p class="question-text">Would you agree that we're lowkey better when we choose each other instead of reacting to emotions?</p>
+        <div class="options">
+          <button type="button" class="option" data-answer="yes">Yes</button>
+          <button type="button" class="option" data-answer="real">That's real</button>
+          <button type="button" class="option" data-answer="growth">Growth looks good on us</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="final-section" class="quiz-section">
+      <h2 class="final-title">Okay last question. The important one.</h2>
+      <div class="final-pause-wrap" id="final-pause-wrap">
+        <p class="final-pause-line" id="final-line-1">I know I don't always get everything right the first time.</p>
+        <p class="final-pause-line" id="final-line-2">But I'm choosing to stay, communicate, and not let my head run the show.</p>
+        <p class="final-pause-line" id="final-line-3">And I really like us when we're us.</p>
+      </div>
+      <div class="final-question-wrap" id="final-question-wrap">
+        <p class="final-question">Will you be my Valentine on February 14, 2026?</p>
+        <div class="final-options">
+          <button type="button" class="btn btn-yes" data-final="yes">Yes, obviously 💘</button>
+          <button type="button" class="btn btn-yes" data-final="yes-planning">Yes, but you're planning everything 😌</button>
+          <button type="button" class="btn btn-no" data-final="no" id="btn-no-valentine">No, but thanks ❤️</button>
+        </div>
+      </div>
+    </div>
+
+    <nav class="quiz-nav">
+      <button type="button" class="btn btn-ghost" data-action="prev" aria-label="Previous">← Back</button>
+      <span class="progress-text"><span id="current-q">1</span> / <span id="total-q">9</span></span>
+      <button type="button" class="btn btn-ghost" data-action="next" aria-label="Next">Next →</button>
+    </nav>
+  </main>
+
+  <section id="results-screen" class="screen">
+    <div class="results-header">
+      <h2 class="results-title">Past questionnaires</h2>
+      <p class="results-subtitle">Your previous answers, for the sentimental archive.</p>
+    </div>
+    <div id="results-list" class="results-list"></div>
+    <p id="results-empty" class="results-empty" hidden>No completed questionnaires yet. Take the quiz to see results here.</p>
+  </section>
+
+  <section id="success" class="screen">
+    <p class="success-message">Good choice. Your Valentine has been secured.<br>Emotional growth + cute dates loading…</p>
+    <div class="success-hearts" aria-hidden="true"></div>
+  </section>
+
+  <div id="popup-overlay" class="popup-overlay" hidden>
+    <div class="popup">
+      <p id="popup-text"></p>
+      <button type="button" class="btn btn-primary" data-action="close-popup">OK</button>
+    </div>
+  </div>
+
+  <div id="violence-popup" class="popup-overlay" hidden>
+    <div class="popup">
+      <p>Ahh, so we choosing violence today. Its ok Ill help you out</p>
+      <button type="button" class="btn btn-primary" data-action="close-violence">OK</button>
+    </div>
+  </div>
+
+  <script>
+(function () {
+  'use strict';
+
+  var SPLASH_DURATION = 3500;
+  var STORAGE_KEY = 'valentineQuizResults';
+
+  var state = {
+    currentScreen: 'splash',
+    currentQuestion: 1,
+    totalQuestions: 9,
+    wrongCount: 0,
+    noThanksClicks: 0,
+    violenceMode: false,
+    q5CustomAnswered: false,
+    q7CustomAnswered: false,
+    answers: {}
+  };
+
+  var screens = {
+    splash: document.getElementById('splash'),
+    landing: document.getElementById('landing'),
+    quiz: document.getElementById('quiz'),
+    success: document.getElementById('success'),
+    results: document.getElementById('results-screen')
+  };
+
+  var section1 = document.getElementById('section-1');
+  var section2 = document.getElementById('section-2');
+  var section3 = document.getElementById('section-3');
+  var finalSection = document.getElementById('final-section');
+  var btnNoValentine = document.getElementById('btn-no-valentine');
+  var popupOverlay = document.getElementById('popup-overlay');
+  var popupText = document.getElementById('popup-text');
+  var violencePopup = document.getElementById('violence-popup');
+  var currentQEl = document.getElementById('current-q');
+  var totalQEl = document.getElementById('total-q');
+  var quizNav = document.querySelector('.quiz-nav');
+  var q5Wrap = document.querySelector('[data-q="5"] .custom-input-wrap');
+  var q5Input = document.getElementById('q5-input');
+  var q7Wrap = document.querySelector('[data-q="7"] .custom-input-wrap');
+  var q7Input = document.getElementById('q7-input');
+  var finalPauseWrap = document.getElementById('final-pause-wrap');
+  var finalQuestionWrap = document.getElementById('final-question-wrap');
+  var finalLine1 = document.getElementById('final-line-1');
+  var finalLine2 = document.getElementById('final-line-2');
+  var finalLine3 = document.getElementById('final-line-3');
+  var tabBtns = document.querySelectorAll('.tab-btn');
+  var resultsList = document.getElementById('results-list');
+  var resultsEmpty = document.getElementById('results-empty');
+
+  function showScreen(id) {
+    if (id === 'results') {
+      document.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+      var r = document.querySelector('.tab-btn[data-tab="results"]');
+      if (r) r.classList.add('active');
+      Object.keys(screens).forEach(function (k) { if (screens[k]) screens[k].classList.remove('active'); });
+      if (screens.results) screens.results.classList.add('active');
+      renderResults();
+      return;
+    }
+    document.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+    var q = document.querySelector('.tab-btn[data-tab="quiz"]');
+    if (q) q.classList.add('active');
+    Object.keys(screens).forEach(function (k) { if (screens[k]) screens[k].classList.remove('active'); });
+    if (screens[id]) screens[id].classList.add('active');
+    state.currentScreen = id;
+  }
+
+  function getStoredResults() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (_) {
+      return [];
+    }
+  }
+
+  function saveResult(payload) {
+    var list = getStoredResults();
+    list.unshift(payload);
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    } catch (_) {}
+  }
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function renderResults() {
+    var list = getStoredResults();
+    resultsList.innerHTML = '';
+    if (list.length === 0) {
+      resultsEmpty.hidden = false;
+      return;
+    }
+    resultsEmpty.hidden = true;
+    list.forEach(function (entry, index) {
+      var card = document.createElement('div');
+      card.className = 'result-card';
+      var date = new Date(entry.completedAt);
+      var dateStr = date.toLocaleDateString(undefined, { dateStyle: 'medium' }) + ' at ' + date.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+      var bodyId = 'result-body-' + index;
+      card.innerHTML =
+        '<button type="button" class="result-card-header" aria-expanded="false" aria-controls="' + bodyId + '" data-result-toggle>' +
+        '<span>' + escapeHtml(dateStr) + '</span>' +
+        '<span aria-hidden="true">&#9660;</span>' +
+        '</button>' +
+        '<div class="result-card-body" id="' + bodyId + '" hidden></div>';
+      var body = card.querySelector('.result-card-body');
+      var rows = (entry.answers || []).map(function (a) {
+        return '<div class="result-row"><span class="result-q">' + escapeHtml(a.questionText) + '</span><br><span class="result-a">' + escapeHtml(a.answerText) + '</span></div>';
+      }).join('');
+      if (entry.finalAnswer) {
+        rows += '<div class="result-row"><span class="result-q">Will you be my Valentine?</span><br><span class="result-a">' + escapeHtml(entry.finalAnswer) + '</span></div>';
+      }
+      body.innerHTML = rows;
+      var toggleBtn = card.querySelector('[data-result-toggle]');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', function () {
+          var open = body.hidden;
+          body.hidden = !open;
+          this.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+      }
+      resultsList.appendChild(card);
+    });
+  }
+
+  function showSection(sectionEl) {
+    [section1, section2, section3, finalSection].forEach(function (s) { if (s) s.classList.remove('active'); });
+    if (sectionEl) sectionEl.classList.add('active');
+  }
+
+  function showQuestion(num) {
+    if (quizNav) quizNav.style.display = 'flex';
+    state.currentQuestion = num;
+    currentQEl.textContent = num;
+    totalQEl.textContent = state.totalQuestions;
+
+    var allQuestions = document.querySelectorAll('.question');
+    allQuestions.forEach(function (q) {
+      var n = parseInt(q.getAttribute('data-q'), 10);
+      q.style.display = n === num ? 'block' : 'none';
+    });
+
+    if (num <= 3) showSection(section1);
+    else if (num <= 6) showSection(section2);
+    else if (num <= 9) showSection(section3);
+    else showSection(finalSection);
+
+    if (num === 5 && q5Wrap) {
+      q5Wrap.hidden = true;
+      var opts5 = document.querySelectorAll('[data-q="5"] .option');
+      if (opts5.length) opts5.forEach(function (o) { o.disabled = false; });
+    }
+    if (num === 7 && q7Wrap) {
+      q7Wrap.hidden = true;
+      var opts7 = document.querySelectorAll('[data-q="7"] .option');
+      if (opts7.length) opts7.forEach(function (o) { o.disabled = false; });
+    }
+  }
+
+  function showFinal() {
+    state.currentQuestion = 'final';
+    showSection(finalSection);
+    document.querySelectorAll('.question').forEach(function (q) { q.style.display = 'none'; });
+    var titleEl = finalSection && finalSection.querySelector('.final-title');
+    if (titleEl) titleEl.style.display = '';
+    if (finalPauseWrap) finalPauseWrap.style.display = '';
+    if (finalQuestionWrap) {
+      finalQuestionWrap.style.display = '';
+      finalQuestionWrap.classList.remove('visible');
+    }
+    [finalLine1, finalLine2, finalLine3].forEach(function (el) { if (el) el.classList.remove('visible', 'fade-out'); });
+
+    if (state.violenceMode && btnNoValentine) btnNoValentine.style.display = 'none';
+    else if (btnNoValentine) btnNoValentine.style.display = '';
+    if (quizNav) quizNav.style.display = 'none';
+    currentQEl.textContent = '\u2665';
+    totalQEl.textContent = '\u2665';
+
+    runFinalMessageSequence();
+  }
+
+  function runFinalMessageSequence() {
+    var LINE_HOLD = 2400;
+    var FADE_OUT = 700;
+    if (!finalLine1 || !finalLine2 || !finalLine3 || !finalQuestionWrap) return;
+    finalLine1.classList.add('visible');
+    setTimeout(function () {
+      finalLine1.classList.add('fade-out');
+      finalLine2.classList.add('visible');
+    }, LINE_HOLD);
+    setTimeout(function () {
+      finalLine2.classList.add('fade-out');
+      finalLine3.classList.add('visible');
+    }, LINE_HOLD + LINE_HOLD);
+    setTimeout(function () {
+      finalLine3.classList.add('fade-out');
+    }, LINE_HOLD * 3);
+    setTimeout(function () {
+      finalLine1.classList.remove('visible', 'fade-out');
+      finalLine2.classList.remove('visible', 'fade-out');
+      finalLine3.classList.remove('visible', 'fade-out');
+      finalQuestionWrap.classList.add('visible');
+    }, LINE_HOLD * 3 + FADE_OUT);
+  }
+
+  function restartQuiz() {
+    state.currentQuestion = 1;
+    state.wrongCount = 0;
+    state.noThanksClicks = 0;
+    state.violenceMode = false;
+    state.q5CustomAnswered = false;
+    state.q7CustomAnswered = false;
+    state.answers = {};
+    document.querySelectorAll('.option').forEach(function (o) { o.disabled = false; o.classList.remove('chosen'); });
+    if (q5Wrap) q5Wrap.hidden = true;
+    if (q7Wrap) q7Wrap.hidden = true;
+    if (btnNoValentine) btnNoValentine.style.display = '';
+    showScreen('landing');
+  }
+
+  function showPopup(message) {
+    if (popupText) popupText.textContent = message;
+    if (popupOverlay) popupOverlay.hidden = false;
+  }
+
+  function closePopup() {
+    if (popupOverlay) popupOverlay.hidden = true;
+  }
+
+  function closeViolencePopup() {
+    if (violencePopup) violencePopup.hidden = true;
+    state.violenceMode = true;
+    showFinal();
+  }
+
+  function goNext() {
+    if (state.currentQuestion === 9) {
+      showFinal();
+      return;
+    }
+    showQuestion(state.currentQuestion + 1);
+  }
+
+  function goPrev() {
+    if (state.currentQuestion <= 1) return;
+    showQuestion(state.currentQuestion - 1);
+  }
+
+  setTimeout(function () {
+    if (state.currentScreen === 'splash') showScreen('landing');
+  }, SPLASH_DURATION);
+
+  function recordAnswer(qNum, questionText, answerText) {
+    state.answers[qNum] = { questionText: questionText, answerText: answerText };
+  }
+
+  if (tabBtns && tabBtns.length) {
+    for (var i = 0; i < tabBtns.length; i++) {
+      (function (btn) {
+        btn.addEventListener('click', function () {
+          var tab = this.getAttribute('data-tab');
+          if (tab === 'results') showScreen('results');
+          else {
+            document.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+            this.classList.add('active');
+            Object.keys(screens).forEach(function (k) { if (screens[k]) screens[k].classList.remove('active'); });
+            if (screens[state.currentScreen]) screens[state.currentScreen].classList.add('active');
+          }
+        });
+      })(tabBtns[i]);
+    }
+  }
+
+  var startBtn = document.querySelector('[data-action="start-quiz"]');
+  if (startBtn) startBtn.addEventListener('click', function () {
+    state.answers = {};
+    showScreen('quiz');
+    showQuestion(1);
+  });
+
+  var nextBtn = document.querySelector('[data-action="next"]');
+  if (nextBtn) nextBtn.addEventListener('click', goNext);
+  var prevBtn = document.querySelector('[data-action="prev"]');
+  if (prevBtn) prevBtn.addEventListener('click', goPrev);
+
+  var optionBtns = document.querySelectorAll('.option');
+  for (var j = 0; j < optionBtns.length; j++) {
+    (function (btn) {
+      btn.addEventListener('click', function () {
+        var answer = this.getAttribute('data-answer');
+        var qEl = this.closest('.question');
+        var qNum = parseInt(qEl ? qEl.getAttribute('data-q') : '0', 10);
+        var qtEl = qEl ? qEl.querySelector('.question-text') : null;
+        var questionText = qtEl ? qtEl.textContent : '';
+
+        if (answer === 'restart') {
+          showPopup("Let's try again from the beginning. No pressure.");
+          setTimeout(function () { closePopup(); restartQuiz(); }, 1500);
+          return;
+        }
+        if (answer === 'noted') {
+          recordAnswer(qNum, questionText, this.textContent.trim());
+          showPopup("Okay, noted");
+          state.wrongCount = Math.max(0, (state.wrongCount || 0) - 1);
+          this.disabled = true;
+          this.classList.add('chosen');
+          setTimeout(function () { closePopup(); goNext(); }, 1200);
+          return;
+        }
+        if (qNum === 5 && answer === 'depends') {
+          this.disabled = true;
+          this.classList.add('chosen');
+          if (q5Wrap) q5Wrap.hidden = false;
+          return;
+        }
+        if (qNum === 7 && answer === 'custom7') {
+          this.disabled = true;
+          this.classList.add('chosen');
+          if (q7Wrap) q7Wrap.hidden = false;
+          return;
+        }
+        recordAnswer(qNum, questionText, this.textContent.trim());
+        this.disabled = true;
+        this.classList.add('chosen');
+        goNext();
+      });
+    })(optionBtns[j]);
+  }
+
+  var submitQ5 = document.querySelector('[data-action="submit-q5"]');
+  if (submitQ5 && q5Input) {
+    submitQ5.addEventListener('click', function () {
+      var val = (q5Input.value || '').trim();
+      if (val) state.q5CustomAnswered = true;
+      var qEl = document.querySelector('[data-q="5"]');
+      var questionText = (qEl && qEl.querySelector('.question-text')) ? qEl.querySelector('.question-text').textContent : '';
+      recordAnswer(5, questionText, val || 'Depends (no text)');
+      if (q5Wrap) q5Wrap.hidden = true;
+      goNext();
+    });
+    q5Input.addEventListener('keydown', function (e) { if (e.key === 'Enter') submitQ5.click(); });
+  }
+
+  var submitQ7 = document.querySelector('[data-action="submit-q7"]');
+  if (submitQ7 && q7Input) {
+    submitQ7.addEventListener('click', function () {
+      var val = (q7Input.value || '').trim();
+      if (val) state.q7CustomAnswered = true;
+      var qEl = document.querySelector('[data-q="7"]');
+      var questionText = (qEl && qEl.querySelector('.question-text')) ? qEl.querySelector('.question-text').textContent : '';
+      recordAnswer(7, questionText, val || 'I have an idea (no text)');
+      if (q7Wrap) q7Wrap.hidden = true;
+      goNext();
+    });
+    q7Input.addEventListener('keydown', function (e) { if (e.key === 'Enter') submitQ7.click(); });
+  }
+
+  var yesBtns = document.querySelectorAll('[data-final="yes"], [data-final="yes-planning"]');
+  for (var y = 0; y < yesBtns.length; y++) {
+    (function (btn) {
+      btn.addEventListener('click', function () {
+        var finalAnswer = this.textContent.trim();
+        var answersArray = [];
+        for (var q = 1; q <= 9; q++) { if (state.answers[q]) answersArray.push(state.answers[q]); }
+        saveResult({ id: Date.now(), completedAt: new Date().toISOString(), answers: answersArray, finalAnswer: finalAnswer });
+        showScreen('success');
+      });
+    })(yesBtns[y]);
+  }
+
+  if (btnNoValentine) {
+    btnNoValentine.addEventListener('click', function () {
+      state.noThanksClicks += 1;
+      if (state.noThanksClicks >= 2 && violencePopup) violencePopup.hidden = false;
+    });
+  }
+
+  var closePopupBtn = document.querySelector('[data-action="close-popup"]');
+  if (closePopupBtn) closePopupBtn.addEventListener('click', closePopup);
+  var closeViolenceBtn = document.querySelector('[data-action="close-violence"]');
+  if (closeViolenceBtn) closeViolenceBtn.addEventListener('click', closeViolencePopup);
+})();
+  </script>
+</body>
+</html>
